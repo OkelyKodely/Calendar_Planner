@@ -40,6 +40,10 @@ public class CalendarPlannerAll implements MouseListener {
     private Connection connection = null;
     private Statement statement  = null;
 
+    /********
+     * ***
+     * CONSt
+     */
     public CalendarPlannerAll() {
 
         this.createConnect();
