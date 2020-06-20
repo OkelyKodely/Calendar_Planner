@@ -14,7 +14,9 @@ public class CalendarPlannerDriver
     private Connection connection = null;
     private JFrame frame, plan = null;
     private JPanel panel = null, plan2;
-    private JButton previousMonth, nextMonth, todayMonth;
+    private JButton previousMonth, nextMonth, todayMonth, cyclePlan;
+    private String currentTheDate = "";
+    private String cycleCurrentTheDate = "";
     private java.util.Date date;
     private int month, day, year;
     private boolean start, pleaseInsertMe;
@@ -316,6 +318,8 @@ public class CalendarPlannerDriver
             month = this.date.getMonth() + 1;
             day = this.date.getDate();
             year = this.date.getYear() + 1900;
+            currentTheDate = month + "/" + day + "/" + year;
+            cycleCurrentTheDate = month + "/" + day + "/" + year;
         }
         if (start) {
             start = false;
@@ -334,9 +338,11 @@ public class CalendarPlannerDriver
         todayMonth = new JButton("Current Month");
         previousMonth = new JButton("< Prev Month");
         nextMonth = new JButton("Next Month >");
+        cyclePlan = new JButton("Cycle Plan");
         panel.add(todayMonth);
         panel.add(previousMonth);
         panel.add(nextMonth);
+        panel.add(cyclePlan);
         todayMonth.setBounds(11, 50, 200, 20);
         start = true;
         todayMonth.addActionListener(new ActionListener() {
@@ -440,6 +446,26 @@ public class CalendarPlannerDriver
                 t.start();
             }
         });
+        cyclePlan.setBounds(301, 40, 100, 20);
+        cyclePlan.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Thread t = new Thread() {
+                    public void run() {
+                        try {
+                            graphics.setColor(Color.MAGENTA);
+                            graphics.fillRect(0, 50, 1250, 760);
+                            Image image = ImageIO.read(getClass().getResourceAsStream("background.jpg"));
+                            graphics.drawImage(image, 650, 50, image.getWidth(null), image.getHeight(null), null);
+                            findDB();
+                        } catch(Exception ee) {
+                            ee.printStackTrace();
+                        }
+                    }
+                };
+                t.start();
+            }
+        });
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         graphics = panel.getGraphics();
@@ -471,6 +497,65 @@ public class CalendarPlannerDriver
             connection = DriverManager.getConnection(url);
             statement = connection.createStatement();
 
+        } catch(SQLException sqle) {
+            sqle.printStackTrace();
+        }
+    }
+
+    public void findDB() {
+        ResultSet rs = null;
+        try {
+
+            statement = connection.createStatement();
+            String sqlString = "select thedate from calendar order by thedate asc;";
+            rs = statement.executeQuery(sqlString);
+            boolean oneMoe = false;
+            boolean nmoe = false;
+            while(rs.next()) {
+                String thedate = rs.getString("thedate");
+                if(oneMoe || nmoe) {
+                    oneMoe = false;
+                    cycleCurrentTheDate = thedate;
+                    int tmonth = Integer.parseInt(
+                            cycleCurrentTheDate.substring(
+                                0,
+                                cycleCurrentTheDate.indexOf("/")));
+                    String str1 = cycleCurrentTheDate.substring(cycleCurrentTheDate.indexOf("/") + 1, cycleCurrentTheDate.length());
+                    int tdate = Integer.parseInt(
+                            str1.substring(
+                                0,
+                                str1.indexOf("/")));
+                    String str2 = str1.substring(
+                            str1.indexOf("/") + 1, str1.length());
+                    int tyer = Integer.parseInt(str2);
+                    java.util.Calendar c = java.util.Calendar.getInstance();
+                    c.setTime(new Date(tyer - 1900, tmonth - 1, 1));
+                    int dayOfWeek = c.get(java.util.Calendar.DAY_OF_WEEK);
+                    YearMonth yearMonthObject = YearMonth.of((tyer), tmonth);
+                    int daysInMonth = yearMonthObject.lengthOfMonth();
+                    try {
+                        graphics.setColor(Color.MAGENTA);
+                        graphics.fillRect(0, 50, 1250, 760);
+                        Image image = ImageIO.read(getClass().getResourceAsStream("background.jpg"));
+                        graphics.drawImage(image, 650, 50, image.getWidth(null), image.getHeight(null), null);
+                    } catch(Exception ee) {
+                        ee.printStackTrace();
+                    }
+                    graphics.setColor(Color.BLACK);
+                    graphics.drawString(tmonth + "-" + (tyer), 100, 100);
+                    month = tmonth; year = tyer; day = tdate;
+                    displayDayz(daysInMonth, dayOfWeek);
+                    if(nmoe) {
+//                        return;
+                    }
+                    nmoe = true;
+                    oneMoe = false;
+                }
+                if(thedate.equals(cycleCurrentTheDate)) {
+                    oneMoe = true;
+                }
+            }
+            statement.close();
         } catch(SQLException sqle) {
             sqle.printStackTrace();
         }
