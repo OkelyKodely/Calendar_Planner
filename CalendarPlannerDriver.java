@@ -81,7 +81,7 @@ public class CalendarPlannerDriver
                 plan = new JFrame();
                 plan.setLayout(null);
                 plan2 = new JPanel();
-                plan2.setBackground(Color.RED);
+                plan2.setBackground(new Color(190, 200, 210));
                 plan2.setLayout(null);
                 plan. setBounds(0, 0, 530, 950);
                 plan2.setBounds(plan.getBounds());
@@ -369,9 +369,9 @@ public class CalendarPlannerDriver
 JButton tgglPlay = new JButton("Toggle Music");
     public void setAllThings() {
         panel = new JPanel();
-        panel.setBackground(Color .red);
+        panel.setBackground(new Color(190, 200, 210));
         frame = new JFrame();
-        frame.setTitle("Calendar Planner by DC");
+        frame.setTitle("Calendar Planner by okelykodely");
         frame.setLayout(null);
         frame.setBounds(0, 0, 1250, 760);
         // make the frame half the height and width
@@ -414,7 +414,7 @@ JButton tgglPlay = new JButton("Toggle Music");
                 Thread t = new Thread() {
                     public void run() {
                         try {
-                            graphics.setColor(Color.MAGENTA);
+                            graphics.setColor(Color.WHITE);
                             graphics.fillRect(0, 50, 1250, 760);
                             String pic = "";
                             if(month == 1)
@@ -469,7 +469,7 @@ JButton tgglPlay = new JButton("Toggle Music");
                 Thread t = new Thread() {
                     public void run() {
                         try {
-                            graphics.setColor(Color.MAGENTA);
+                            graphics.setColor(Color.WHITE);
                             graphics.fillRect(0, 50, 1250, 760);
                             String pic = "";
                             if(month == 1)
@@ -530,7 +530,7 @@ JButton tgglPlay = new JButton("Toggle Music");
                 Thread t = new Thread() {
                     public void run() {
                         try {
-                            graphics.setColor(Color.MAGENTA);
+                            graphics.setColor(Color.WHITE);
                             graphics.fillRect(0, 50, 1250, 760);
                             String pic = "";
                             if(month == 1)
@@ -591,7 +591,7 @@ JButton tgglPlay = new JButton("Toggle Music");
                 Thread t = new Thread() {
                     public void run() {
                         try {
-                            graphics.setColor(Color.MAGENTA);
+                            graphics.setColor(Color.WHITE);
                             graphics.fillRect(0, 50, 1250, 760);
                             String pic = "";
                             if(month == 1)
@@ -713,7 +713,7 @@ JButton tgglPlay = new JButton("Toggle Music");
                 YearMonth yearMonthObject = YearMonth.of((tyer), tmonth);
                 int daysInMonth = yearMonthObject.lengthOfMonth();
                 try {
-                    graphics.setColor(Color.MAGENTA);
+                    graphics.setColor(Color.WHITE);
                     graphics.fillRect(0, 50, 1250, 760);
                     Image image = ImageIO.read(getClass().getResourceAsStream("background.jpg"));
                                                 graphics.drawImage(image, 680, 50, 550, 710, null);
@@ -771,7 +771,7 @@ JButton tgglPlay = new JButton("Toggle Music");
                     int daysInMonth = yearMonthObject.lengthOfMonth();
                     if(!reallyfound) {
                         try {
-                            graphics.setColor(Color.MAGENTA);
+                            graphics.setColor(Color.WHITE);
                             graphics.fillRect(0, 50, 1250, 760);
                             String pic = "";
                             if(month == 1)
@@ -846,7 +846,7 @@ break;
                     YearMonth yearMonthObject = YearMonth.of((tyer), tmonth);
                     int daysInMonth = yearMonthObject.lengthOfMonth();
                     try {
-                        graphics.setColor(Color.MAGENTA);
+                        graphics.setColor(Color.WHITE);
                         graphics.fillRect(0, 50, 1250, 760);
                         Image image = ImageIO.read(getClass().getResourceAsStream("background.jpg"));
                                                     graphics.drawImage(image, 680, 50, 550, 710, null);
