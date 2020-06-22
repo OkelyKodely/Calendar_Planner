@@ -1,1 +1,18 @@
-create table calendar (thedate varchar(15),thecontent text);
+
+create table calendar (thedate varchar(15),
+                        thecontent text,
+                        content2 text,
+                        c1 int(11),
+                        c2 int(11),
+                        content3 text,
+                        content4 text,
+                        content5 text,
+                        c3 int(11),
+                        c4 int(11),
+                        c5 int(11),
+                        c1t varchar(100),
+                        c2t varchar(100),
+                        c3t varchar(100),
+                        c4t varchar(100),
+                        c5t varchar(100),
+                        td int);
