@@ -17,6 +17,7 @@ public class CalendarPlannerDriver
     private JButton previousMonth, nextMonth, todayMonth, cyclePlan;
     private String currentTheDate = "";
     private String cycleCurrentTheDate = "";
+    int td =-1;
     private java.util.Date date;
     private int month, day, year;
     private boolean start, pleaseInsertMe;
@@ -261,7 +262,13 @@ public class CalendarPlannerDriver
                             // // updateOrInsertToDB();
                             String sqlString = "update calendar set thecontent = '"+jta.getText()+"', content2 = '"+jta2.getText()+"', content3 = '"+jta3.getText()+"', content4 = '"+jta4.getText()+"', content5 = '"+jta5.getText()+"', c1 = "+c_1+", c2 = "+c_2+", c3 = "+c_3+", c4 = "+c_4+", c5 = "+c_5+", c1t = '"+cl1t.getText()+"', c2t = '"+cl2t.getText()+"', c3t = '"+cl3t.getText()+"', c4t = '"+cl4t.getText()+"', c5t = '"+cl5t.getText()+"' where thedate = '"+month + "/" + thei + "/" + year+"';";
                             if(pleaseInsertMe) {
-                                sqlString = "insert into calendar (c1t, c2t, c3t, c4t, c5t, c1, c2, c3, c4, c5, thedate, thecontent, content2, content3, content4, content5) values ('"+cl1t.getText()+"','"+cl2t.getText()+"','"+cl3t.getText()+"','"+cl4t.getText()+"','"+cl5t.getText()+"',"+c_1+","+c_2+","+c_3+","+c_4+","+c_5+",'"+month + "/" + thei + "/" + year+"','"+jta.getText()+"','"+jta2.getText()+"','"+jta3.getText()+"','"+jta4.getText()+"','"+jta5.getText()+"');";
+                                String s = "select max(td) as ttdd from calendar;";
+                                ResultSet rs = statement.executeQuery(s);
+                                int ttdd = -1;
+                                if(rs.next()) {
+                                    ttdd = 1 + rs.getInt("ttdd");
+                                }
+                                sqlString = "insert into calendar (td, c1t, c2t, c3t, c4t, c5t, c1, c2, c3, c4, c5, thedate, thecontent, content2, content3, content4, content5) values ("+ttdd+", '"+cl1t.getText()+"','"+cl2t.getText()+"','"+cl3t.getText()+"','"+cl4t.getText()+"','"+cl5t.getText()+"',"+c_1+","+c_2+","+c_3+","+c_4+","+c_5+",'"+month + "/" + thei + "/" + year+"','"+jta.getText()+"','"+jta2.getText()+"','"+jta3.getText()+"','"+jta4.getText()+"','"+jta5.getText()+"');";
                             }
                             statement.execute(sqlString);
                             statement.close();
@@ -457,9 +464,9 @@ public class CalendarPlannerDriver
                             graphics.fillRect(0, 50, 1250, 760);
                             Image image = ImageIO.read(getClass().getResourceAsStream("background.jpg"));
                             graphics.drawImage(image, 650, 50, image.getWidth(null), image.getHeight(null), null);
-                            findDB();
-                        } catch(Exception ee) {
-                            ee.printStackTrace();
+                            findTheNextPlanMonth();
+                        } catch(Exception ev) {
+                            ev.printStackTrace();
                         }
                     }
                 };
@@ -502,20 +509,141 @@ public class CalendarPlannerDriver
         }
     }
 
-    public void findDB() {
+    public void findTheNextPlanMonth() {
+        System.out.println(cycleCurrentTheDate);
         ResultSet rs = null;
         try {
 
             statement = connection.createStatement();
-            String sqlString = "select thedate from calendar order by thedate asc;";
+            String sql = "select thedate from calendar order by td asc;";
+            rs = statement.executeQuery(sql);
+            String t = "";
+            if(rs.next()) {
+                t = rs.getString("thedate");
+            }
+            sql = "select * from calendar order by td asc;";
+            rs = statement.executeQuery(sql);
+            String tt = "";
+            int count = 0;
+            while(rs.next()) {
+                if(tt.equals(rs.getString("thedate"))) {
+                    count--;
+                }
+                tt = rs.getString("thedate");
+                count++;
+            }
+            System.out.println(tt+"werwer");
+            System.out.println(cycleCurrentTheDate+"werwer");
+            System.out.println(t+"werwer");
+            if(cycleCurrentTheDate.equals(tt)) {
+                cycleCurrentTheDate = t;
+                System.out.println(cycleCurrentTheDate+"twterwer");
+                int tmonth = Integer.parseInt(
+                        cycleCurrentTheDate.substring(
+                            0,
+                            cycleCurrentTheDate.indexOf("/")));
+                String str1 = cycleCurrentTheDate.substring(cycleCurrentTheDate.indexOf("/") + 1, cycleCurrentTheDate.length());
+                int tdate = Integer.parseInt(
+                        str1.substring(
+                            0,
+                            str1.indexOf("/")));
+                String str2 = str1.substring(
+                        str1.indexOf("/") + 1, str1.length());
+                int tyer = Integer.parseInt(str2);
+                java.util.Calendar c = java.util.Calendar.getInstance();
+                c.setTime(new Date(tyer - 1900, tmonth - 1, 1));
+                int dayOfWeek = c.get(java.util.Calendar.DAY_OF_WEEK);
+                YearMonth yearMonthObject = YearMonth.of((tyer), tmonth);
+                int daysInMonth = yearMonthObject.lengthOfMonth();
+                try {
+                    graphics.setColor(Color.MAGENTA);
+                    graphics.fillRect(0, 50, 1250, 760);
+                    Image image = ImageIO.read(getClass().getResourceAsStream("background.jpg"));
+                    graphics.drawImage(image, 650, 50, image.getWidth(null), image.getHeight(null), null);
+                } catch(Exception ee) {
+                    ee.printStackTrace();
+                }
+                graphics.setColor(Color.BLACK);
+                graphics.drawString(tmonth + "-" + (tyer), 100, 100);
+                month = tmonth; year = tyer; day = tdate;
+                displayDayz(daysInMonth, dayOfWeek);
+                return;
+            }
+            sql = "select td from calendar where thedate = '"+cycleCurrentTheDate+"';";
+            rs = statement.executeQuery(sql);
+            if(rs.next()) {
+                td = rs.getInt("td");
+                System.out.println(td+"<><>");
+            }
+            String sqlString = "select thedate, td from calendar where td >= "+td+" order by td asc;";
             rs = statement.executeQuery(sqlString);
             boolean oneMoe = false;
+            boolean found = false;
+            boolean reallyfound = false;
             boolean nmoe = false;
+            boolean ass = true;
+            String mybad = "";
+            int countt = 0;
             while(rs.next()) {
                 String thedate = rs.getString("thedate");
-                if(oneMoe || nmoe) {
+                if(countt == 1)
+                mybad = thedate;
+                
+                countt++;
+                if(found || nmoe) {
                     oneMoe = false;
                     cycleCurrentTheDate = thedate;
+                    int tmonth = Integer.parseInt(
+                            cycleCurrentTheDate.substring(
+                                0,
+                                cycleCurrentTheDate.indexOf("/")));
+                    String str1 = cycleCurrentTheDate.substring(cycleCurrentTheDate.indexOf("/") + 1, cycleCurrentTheDate.length());
+                    int tdate = Integer.parseInt(
+                            str1.substring(
+                                0,
+                                str1.indexOf("/")));
+                    String str2 = str1.substring(
+                            str1.indexOf("/") + 1, str1.length());
+                    int tyer = Integer.parseInt(str2);
+                    java.util.Calendar c = java.util.Calendar.getInstance();
+                    c.setTime(new Date(tyer - 1900, tmonth - 1, 1));
+                    int dayOfWeek = c.get(java.util.Calendar.DAY_OF_WEEK);
+                    YearMonth yearMonthObject = YearMonth.of((tyer), tmonth);
+                    int daysInMonth = yearMonthObject.lengthOfMonth();
+                    if(!reallyfound) {
+                        try {
+                            graphics.setColor(Color.MAGENTA);
+                            graphics.fillRect(0, 50, 1250, 760);
+                            Image image = ImageIO.read(getClass().getResourceAsStream("background.jpg"));
+                            graphics.drawImage(image, 650, 50, image.getWidth(null), image.getHeight(null), null);
+                        } catch(Exception ee) {
+                            ee.printStackTrace();
+                        }
+                        graphics.setColor(Color.BLACK);
+                        graphics.drawString(tmonth + "-" + (tyer), 100, 100);
+                        month = tmonth; year = tyer; day = tdate;
+                        displayDayz(daysInMonth, dayOfWeek);
+                        found = false;
+                    } else {
+                                    //cycleCurrentTheDate = mybad;
+break;
+                    }
+                    nmoe = true;
+                    oneMoe = false;
+                    reallyfound = true;
+                }
+                if(!reallyfound && thedate.equals(cycleCurrentTheDate)) {
+                    oneMoe = true;
+                    found = true;
+                }
+            }
+            if(!reallyfound) {
+                sqlString = "select thedate, td from calendar where td >= "+td+" order by td asc;";
+                rs = statement.executeQuery(sqlString);
+                if(rs.next()) {
+                    String thedate = rs.getString("thedate");
+                    cycleCurrentTheDate = thedate;
+                    System.out.println(cycleCurrentTheDate+"asdfsdfa");
                     int tmonth = Integer.parseInt(
                             cycleCurrentTheDate.substring(
                                 0,
@@ -545,16 +673,9 @@ public class CalendarPlannerDriver
                     graphics.drawString(tmonth + "-" + (tyer), 100, 100);
                     month = tmonth; year = tyer; day = tdate;
                     displayDayz(daysInMonth, dayOfWeek);
-                    if(nmoe) {
-//                        return;
-                    }
-                    nmoe = true;
-                    oneMoe = false;
-                }
-                if(thedate.equals(cycleCurrentTheDate)) {
-                    oneMoe = true;
-                }
+                }                
             }
+            System.out.println(cycleCurrentTheDate+"<>");
             statement.close();
         } catch(SQLException sqle) {
             sqle.printStackTrace();
