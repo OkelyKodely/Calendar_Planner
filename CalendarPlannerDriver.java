@@ -337,7 +337,7 @@ public class CalendarPlannerDriver
         panel = new JPanel();
         panel.setBackground(Color.RED);
         frame = new JFrame();
-        frame.setTitle("Calendar Planner");
+        frame.setTitle("Calendar Planner by DC");
         frame.setLayout(null);
         frame.setBounds(0, 0, 1250, 760);
         panel.setBounds(frame.getBounds());
@@ -345,7 +345,7 @@ public class CalendarPlannerDriver
         todayMonth = new JButton("Current Month");
         previousMonth = new JButton("< Prev Month");
         nextMonth = new JButton("Next Month >");
-        cyclePlan = new JButton("Cycle Plan");
+        cyclePlan = new JButton("Cycle Event");
         panel.add(todayMonth);
         panel.add(previousMonth);
         panel.add(nextMonth);
@@ -575,7 +575,7 @@ public class CalendarPlannerDriver
                 td = rs.getInt("td");
                 System.out.println(td+"<><>");
             }
-            String sqlString = "select thedate, td from calendar where td >= "+td+" order by td asc;";
+            String sqlString = "select distinct thedate, td from calendar where td >= "+td+" order by td asc;";
             rs = statement.executeQuery(sqlString);
             boolean oneMoe = false;
             boolean found = false;
@@ -638,7 +638,7 @@ break;
                 }
             }
             if(!reallyfound) {
-                sqlString = "select thedate, td from calendar where td >= "+td+" order by td asc;";
+                sqlString = "select distinct thedate, td from calendar where td >= "+td+" order by td asc;";
                 rs = statement.executeQuery(sqlString);
                 if(rs.next()) {
                     String thedate = rs.getString("thedate");
@@ -687,7 +687,9 @@ break;
             @Override
             public void run() {
                 graphics.setColor(Color.GREEN);
-                graphics.drawString("SUN     MON     TUES      WED     THUR     FRI      SAT", 100, 145);
+                graphics.setFont(new Font("Serif", Font.TRUETYPE_FONT, 30));
+
+                graphics.drawString("SUN  MON  TUES  WED  THUR  FRI  SAT", 100, 145);
 
                 int x = 0;
                 
@@ -720,6 +722,7 @@ break;
                         graphics.drawOval(100+x-25,y+200-42,70,70);
                     }
 
+                    graphics.setFont(new Font("Serif", Font.TRUETYPE_FONT, 40));
                     if(x == 0) {
                         graphics.setColor(Color.GREEN);
                         graphics.drawString(String.valueOf(i+1),100+x,y+200);
