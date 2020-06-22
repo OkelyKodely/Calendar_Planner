@@ -15,7 +15,6 @@ public class CalendarPlannerDriver
     private JFrame frame, plan = null;
     private JPanel panel = null, plan2;
     private JButton previousMonth, nextMonth, todayMonth, cyclePlan;
-    private String currentTheDate = "";
     private String cycleCurrentTheDate = "";
     int td =-1;
     private java.util.Date date;
@@ -42,7 +41,7 @@ public class CalendarPlannerDriver
                 x=0;
             }
             int thex = e.getX(); int they = e.getY() + 70;
-            if(thex >= x+100 && thex <= x+100 + 80 && they >= y+200 && they <= y+200 + 80) {
+            if(thex >= x+100 && thex <= x+100 + 80 && they >= y+200+35 && they <= y+200 + 150-30 ) {
                 plan = new JFrame();
                 plan.setLayout(null);
                 plan2 = new JPanel();
@@ -325,7 +324,6 @@ public class CalendarPlannerDriver
             month = this.date.getMonth() + 1;
             day = this.date.getDate();
             year = this.date.getYear() + 1900;
-            currentTheDate = month + "/" + day + "/" + year;
             cycleCurrentTheDate = month + "/" + day + "/" + year;
         }
         if (start) {
@@ -360,8 +358,33 @@ public class CalendarPlannerDriver
                         try {
                             graphics.setColor(Color.MAGENTA);
                             graphics.fillRect(0, 50, 1250, 760);
-                            Image image = ImageIO.read(getClass().getResourceAsStream("background.jpg"));
-                            graphics.drawImage(image, 650, 50, image.getWidth(null), image.getHeight(null), null);
+                            String pic = "";
+                            if(month == 1)
+                                pic = "background.jpg";
+                            if(month == 2)
+                                pic = "background2.jpg";
+                            if(month == 3)
+                                pic = "background3.jpg";
+                            if(month == 4)
+                                pic = "background4.jpg";
+                            if(month == 5)
+                                pic = "background5.jpg";
+                            if(month == 6)
+                                pic = "background6.jpg";
+                            if(month == 7)
+                                pic = "background7.jpg";
+                            if(month == 8)
+                                pic = "background8.jpg";
+                            if(month == 9)
+                                pic = "background9.jpg";
+                            if(month == 10)
+                                pic = "background10.jpg";
+                            if(month == 11)
+                                pic = "background11.jpg";
+                            if(month == 12)
+                                pic = "background12.jpg";
+                            Image image = ImageIO.read(getClass().getResourceAsStream(pic));
+                            graphics.drawImage(image, 650, 50, 550, 710, null);
                         } catch(Exception ee) {
                             ee.printStackTrace();
                         }
@@ -390,8 +413,33 @@ public class CalendarPlannerDriver
                         try {
                             graphics.setColor(Color.MAGENTA);
                             graphics.fillRect(0, 50, 1250, 760);
-                            Image image = ImageIO.read(getClass().getResourceAsStream("background.jpg"));
-                            graphics.drawImage(image, 650, 50, image.getWidth(null), image.getHeight(null), null);
+                            String pic = "";
+                            if(month == 1)
+                                pic = "background.jpg";
+                            if(month == 2)
+                                pic = "background2.jpg";
+                            if(month == 3)
+                                pic = "background3.jpg";
+                            if(month == 4)
+                                pic = "background4.jpg";
+                            if(month == 5)
+                                pic = "background5.jpg";
+                            if(month == 6)
+                                pic = "background6.jpg";
+                            if(month == 7)
+                                pic = "background7.jpg";
+                            if(month == 8)
+                                pic = "background8.jpg";
+                            if(month == 9)
+                                pic = "background9.jpg";
+                            if(month == 10)
+                                pic = "background10.jpg";
+                            if(month == 11)
+                                pic = "background11.jpg";
+                            if(month == 12)
+                                pic = "background12.jpg";
+                            Image image = ImageIO.read(getClass().getResourceAsStream(pic));
+                                                        graphics.drawImage(image, 650, 50, 550, 710, null);
                         } catch(Exception ee) {
                             ee.printStackTrace();
                         }
@@ -426,8 +474,33 @@ public class CalendarPlannerDriver
                         try {
                             graphics.setColor(Color.MAGENTA);
                             graphics.fillRect(0, 50, 1250, 760);
-                            Image image = ImageIO.read(getClass().getResourceAsStream("background.jpg"));
-                            graphics.drawImage(image, 650, 50, image.getWidth(null), image.getHeight(null), null);
+                            String pic = "";
+                            if(month == 1)
+                                pic = "background.jpg";
+                            if(month == 2)
+                                pic = "background2.jpg";
+                            if(month == 3)
+                                pic = "background3.jpg";
+                            if(month == 4)
+                                pic = "background4.jpg";
+                            if(month == 5)
+                                pic = "background5.jpg";
+                            if(month == 6)
+                                pic = "background6.jpg";
+                            if(month == 7)
+                                pic = "background7.jpg";
+                            if(month == 8)
+                                pic = "background8.jpg";
+                            if(month == 9)
+                                pic = "background9.jpg";
+                            if(month == 10)
+                                pic = "background10.jpg";
+                            if(month == 11)
+                                pic = "background11.jpg";
+                            if(month == 12)
+                                pic = "background12.jpg";
+                            Image image = ImageIO.read(getClass().getResourceAsStream(pic));
+                                                        graphics.drawImage(image, 650, 50, 550, 710, null);
                         } catch(Exception ee) {
                             ee.printStackTrace();
                         }
@@ -462,8 +535,33 @@ public class CalendarPlannerDriver
                         try {
                             graphics.setColor(Color.MAGENTA);
                             graphics.fillRect(0, 50, 1250, 760);
-                            Image image = ImageIO.read(getClass().getResourceAsStream("background.jpg"));
-                            graphics.drawImage(image, 650, 50, image.getWidth(null), image.getHeight(null), null);
+                            String pic = "";
+                            if(month == 1)
+                                pic = "background.jpg";
+                            if(month == 2)
+                                pic = "background2.jpg";
+                            if(month == 3)
+                                pic = "background3.jpg";
+                            if(month == 4)
+                                pic = "background4.jpg";
+                            if(month == 5)
+                                pic = "background5.jpg";
+                            if(month == 6)
+                                pic = "background6.jpg";
+                            if(month == 7)
+                                pic = "background7.jpg";
+                            if(month == 8)
+                                pic = "background8.jpg";
+                            if(month == 9)
+                                pic = "background9.jpg";
+                            if(month == 10)
+                                pic = "background10.jpg";
+                            if(month == 11)
+                                pic = "background11.jpg";
+                            if(month == 12)
+                                pic = "background12.jpg";
+                            Image image = ImageIO.read(getClass().getResourceAsStream(pic));
+                                                        graphics.drawImage(image, 650, 50, 550, 710, null);
                             findTheNextPlanMonth();
                         } catch(Exception ev) {
                             ev.printStackTrace();
@@ -491,6 +589,7 @@ public class CalendarPlannerDriver
         
         panel.addMouseListener(this);
     }
+    
 
     public void createConnectDB() {
         try {
@@ -559,7 +658,7 @@ public class CalendarPlannerDriver
                     graphics.setColor(Color.MAGENTA);
                     graphics.fillRect(0, 50, 1250, 760);
                     Image image = ImageIO.read(getClass().getResourceAsStream("background.jpg"));
-                    graphics.drawImage(image, 650, 50, image.getWidth(null), image.getHeight(null), null);
+                                                graphics.drawImage(image, 650, 50, 550, 710, null);
                 } catch(Exception ee) {
                     ee.printStackTrace();
                 }
@@ -592,7 +691,9 @@ public class CalendarPlannerDriver
                 countt++;
                 if(found || nmoe) {
                     oneMoe = false;
-                    cycleCurrentTheDate = thedate;
+                    if(!reallyfound) {
+                        cycleCurrentTheDate = thedate;
+                    }
                     int tmonth = Integer.parseInt(
                             cycleCurrentTheDate.substring(
                                 0,
@@ -614,8 +715,33 @@ public class CalendarPlannerDriver
                         try {
                             graphics.setColor(Color.MAGENTA);
                             graphics.fillRect(0, 50, 1250, 760);
-                            Image image = ImageIO.read(getClass().getResourceAsStream("background.jpg"));
-                            graphics.drawImage(image, 650, 50, image.getWidth(null), image.getHeight(null), null);
+                            String pic = "";
+                            if(month == 1)
+                                pic = "background.jpg";
+                            if(month == 2)
+                                pic = "background2.jpg";
+                            if(month == 3)
+                                pic = "background3.jpg";
+                            if(month == 4)
+                                pic = "background4.jpg";
+                            if(month == 5)
+                                pic = "background5.jpg";
+                            if(month == 6)
+                                pic = "background6.jpg";
+                            if(month == 7)
+                                pic = "background7.jpg";
+                            if(month == 8)
+                                pic = "background8.jpg";
+                            if(month == 9)
+                                pic = "background9.jpg";
+                            if(month == 10)
+                                pic = "background10.jpg";
+                            if(month == 11)
+                                pic = "background11.jpg";
+                            if(month == 12)
+                                pic = "background12.jpg";
+                            Image image = ImageIO.read(getClass().getResourceAsStream(pic));
+                                                        graphics.drawImage(image, 650, 50, 550, 710, null);
                         } catch(Exception ee) {
                             ee.printStackTrace();
                         }
@@ -665,7 +791,7 @@ break;
                         graphics.setColor(Color.MAGENTA);
                         graphics.fillRect(0, 50, 1250, 760);
                         Image image = ImageIO.read(getClass().getResourceAsStream("background.jpg"));
-                        graphics.drawImage(image, 650, 50, image.getWidth(null), image.getHeight(null), null);
+                                                    graphics.drawImage(image, 650, 50, 550, 710, null);
                     } catch(Exception ee) {
                         ee.printStackTrace();
                     }
@@ -718,11 +844,13 @@ break;
                         y += 70;
                     }
                     if (i==day-1 && month == new Date().getMonth()+1 && year == new Date().getYear()+1900) {
-                        graphics.setColor(Color.black);
-                        graphics.drawOval(100+x-25,y+200-42,70,70);
+                        graphics.setColor(Color.orange);
+                        graphics.drawOval(100+x-25+20,y+200-42,50,50);
                     }
 
                     graphics.setFont(new Font("Serif", Font.TRUETYPE_FONT, 40));
+                    graphics.setColor(Color.lightGray);
+                    graphics.drawRect(100+x-20,y+200-20-80+50,70,70);
                     if(x == 0) {
                         graphics.setColor(Color.GREEN);
                         graphics.drawString(String.valueOf(i+1),100+x,y+200);
