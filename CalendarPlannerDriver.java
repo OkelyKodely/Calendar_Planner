@@ -28,7 +28,7 @@ public class CalendarPlannerDriver
     private boolean start, pleaseInsertMe;
 
     public CalendarPlannerDriver() {
-        createConnectDB(); setAllThings();
+        createConnectionToDataBase(); setAllThings();
     }
 
     @Override
@@ -611,7 +611,7 @@ JButton tgglPlay = new JButton("Toggle Music");
     }
     
 
-    public void createConnectDB() {
+    public void createConnectionToDataBase() {
         try {
 
             String hostName = "localhost";
