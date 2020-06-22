@@ -5,6 +5,12 @@ import java.util.Date;
 import java.time.YearMonth;
 import javax.imageio.*;
 import java.awt.event.*;
+import java.io.File;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 
 public class CalendarPlannerDriver 
         implements MouseListener {
@@ -330,7 +336,7 @@ public class CalendarPlannerDriver
             start = false;
         }
     }
-
+JButton tgglPlay = new JButton("Toggle Music");
     public void setAllThings() {
         panel = new JPanel();
         panel.setBackground(Color.RED);
@@ -344,12 +350,26 @@ public class CalendarPlannerDriver
         previousMonth = new JButton("< Prev Month");
         nextMonth = new JButton("Next Month >");
         cyclePlan = new JButton("Cycle Event");
+        panel.add(tgglPlay);
         panel.add(todayMonth);
         panel.add(previousMonth);
         panel.add(nextMonth);
         panel.add(cyclePlan);
         todayMonth.setBounds(11, 50, 200, 20);
         start = true;
+        tgglPlay.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Thread t = new Thread() {
+                    public void run() {
+                        
+                        playMusic();
+                    }
+                };
+                
+                t.start();
+            }
+        });
         todayMonth.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -865,10 +885,51 @@ break;
         tr.start();
     }
 
+AudioInputStream audioStream = null;        Clip audioClip =null;
+    
+    private void playKill() {
+        try { //P
+                   File audioFile = new File("theme.wav");
+                   audioStream = AudioSystem.getAudioInputStream(audioFile);
+
+                   AudioFormat format = audioStream.getFormat();
+
+                   DataLine.Info info = new DataLine.Info(Clip.class, format);
+                   audioClip = (Clip) AudioSystem.getLine(info);
+                   audioClip.open(audioStream);
+        } catch(Exception e) { }
+    }
+    boolean playOn = true;
+    private void playMusic() {
+        if(playOn)
+                            try {
+
+                   audioClip.loop(Clip.LOOP_CONTINUOUSLY);
+                   audioClip.start();
+               } catch (Exception e) {
+
+               }
+        else
+
+                            try {
+
+                                audioClip.stop();
+               } catch (Exception e) {
+
+               }
+                    playOn = !playOn;
+
+    }
+
     public static void main(String args[]) {
         Thread tr = new Thread() {
             public void run() {
-                new CalendarPlannerDriver();
+ 
+                CalendarPlannerDriver cpd = new CalendarPlannerDriver();
+                cpd.playKill();
+                cpd.playMusic();
+                
+                
             }
         };
         tr.start();
