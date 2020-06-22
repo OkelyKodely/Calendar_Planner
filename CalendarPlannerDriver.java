@@ -637,7 +637,7 @@ JButton tgglPlay = new JButton("Toggle Music");
             public void run() {
                 previousMonth.doClick();
                 try {
-                    Thread.sleep( 1000);
+                    Thread.sleep(1000 );
                 } catch (InterruptedException ie) {
                 }
                 nextMonth.doClick();
