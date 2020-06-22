@@ -7,6 +7,19 @@ import java.sql.SQLException;
 import java.util.Date;
 
 public class Manager {
+    
+    private static Manager m;
+  
+    private Manager(){}
+  
+    public static Manager getSingleton() 
+    { 
+        if (m == null) 
+            m = new Manager();
+  
+        return m; 
+    }     
+    
     public void displayDayz(int month, int day, int year, final int daysInMonth, final int dayOfWeek, final Graphics graphics, final Connection connection, java.sql.Statement statement) {
         Thread tr = new Thread(new Runnable() {
             @Override
@@ -41,7 +54,7 @@ public class Manager {
                         y += 70;
                     }
                     if (i==day-1 && month == new Date().getMonth()+1 && year == new Date().getYear()+1900) {
-                        graphics.setColor(Color.orange);
+                        graphics.setColor(Color.BLUE);
                         graphics.drawOval(100+x-25+20,y+200-42,50,50);
                     }
 

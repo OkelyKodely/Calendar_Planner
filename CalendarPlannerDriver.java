@@ -1,3 +1,4 @@
+import db.JDataBase;
 import java.awt.*;
 import java.sql. * ;
 import javax.swing.*;
@@ -15,56 +16,48 @@ import javax.sound.sampled.DataLine;
 public class CalendarPlannerDriver 
     implements MouseListener {
 
+    private JSplashScreen sS/**ss*/ = new JSplashScreen();
     private Statement statement  = null;
     private Connection connection = null;
     private JFrame frame, plan = null;
     private JPanel panel = null, plan2;
     private JButton previousMonth, nextMonth, todayMonth, cyclePlan;
     private String cycleCurrentTheDate = "";
-    int td =-1;
+    public int td =-1;
     private java.util.Date date;
     private int month, day, year;
     private Graphics graphics = null;
     private boolean start, pleaseInsertMe;
+    private JDataBase jdb = new JDataBase();
 
     public CalendarPlannerDriver() {
+        //getasingletonOF_MGR
+        mgr = Manager.getSingleton();
         //does not override or implement a iterfatopr
         introSplashScreenOnScreen();
-        createConnectionToDataBase();
+        jdb.createConnectionToDataBase();
+        setDbCredents();
         setAllThings();
     }
     
-    Manager mgr = new Manager();
+    private void setDbCredents() {
+        setDbConnection();
+        setDbStatement();
+    }
+
+    public void setDbStatement() {
+        this.statement = jdb.getStmt();
+    }
+    
+    public void setDbConnection() {
+        this.connection = jdb.getConnection();
+    }
+    
+    Manager mgr;
 AudioInputStream audioStream = null;        private Clip audioClip = null;
 
     public void introSplashScreenOnScreen() {
-        JFrame j = new JFrame();
-        // make the frame half the height and width
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int height = screenSize.height;
-        int width = screenSize.width;
-        j.setBounds(0, 0, 775, 340);
-
-        // here's the part where i center the jframe on screen
-        j.setLocationRelativeTo(null);
-        JPanel p = new JPanel();
-        p.setBounds(j.getBounds());
-        j.add(p);
-        j.setVisible(true);
-        int theX = -9;
-        Graphics g = p.getGraphics();
-        try {
-            Image image = ImageIO.read(getClass().getResourceAsStream("splashscreen.jpg"));
-            g.drawImage(image, 0, 0, 775, 340, null);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            Thread.sleep(3000);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        j.dispose();
+        sS.show();
     }
 
     @Override
@@ -652,24 +645,6 @@ JButton tgglPlay = new JButton("Toggle Music");
         panel.addMouseListener(this);
     }
     
-
-    public void createConnectionToDataBase() {
-        try {
-
-            String hostName = "localhost";
-            String dbName = "calendar";
-            String userName = "root";
-            String passWord = "";
-
-            String url = "jdbc:mysql://" + hostName + ":3320/" + dbName + "?user=" + userName + "&password=" + passWord;
-            connection = DriverManager.getConnection(url);
-            statement = connection.createStatement();
-
-        } catch(SQLException sqle) {
-            sqle.printStackTrace();
-        }
-    }
-
     public void findTheNextPlanMonth() {
         System.out.println(cycleCurrentTheDate);
         ResultSet rs = null;
