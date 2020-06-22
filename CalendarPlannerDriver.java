@@ -15,7 +15,6 @@ import javax.sound.sampled.DataLine;
 public class CalendarPlannerDriver 
     implements MouseListener {
 
-    private Graphics graphics = null;
     private Statement statement  = null;
     private Connection connection = null;
     private JFrame frame, plan = null;
@@ -25,13 +24,19 @@ public class CalendarPlannerDriver
     int td =-1;
     private java.util.Date date;
     private int month, day, year;
+    private Graphics graphics = null;
     private boolean start, pleaseInsertMe;
 
     public CalendarPlannerDriver() {
+        //does not override or implement a iterfatopr
         introSplashScreenOnScreen();
-        createConnectionToDataBase(); setAllThings();
+        createConnectionToDataBase();
+        setAllThings();
     }
     
+    Manager mgr = new Manager();
+AudioInputStream audioStream = null;        private Clip audioClip = null;
+
     public void introSplashScreenOnScreen() {
         JFrame j = new JFrame();
         // make the frame half the height and width
@@ -46,6 +51,7 @@ public class CalendarPlannerDriver
         p.setBounds(j.getBounds());
         j.add(p);
         j.setVisible(true);
+        int theX = -9;
         Graphics g = p.getGraphics();
         try {
             Image image = ImageIO.read(getClass().getResourceAsStream("splashscreen.jpg"));
@@ -306,14 +312,13 @@ public class CalendarPlannerDriver
                                 sqlString = "insert into calendar (td, c1t, c2t, c3t, c4t, c5t, c1, c2, c3, c4, c5, thedate, thecontent, content2, content3, content4, content5) values ("+ttdd+", '"+cl1t.getText()+"','"+cl2t.getText()+"','"+cl3t.getText()+"','"+cl4t.getText()+"','"+cl5t.getText()+"',"+c_1+","+c_2+","+c_3+","+c_4+","+c_5+",'"+month + "/" + thei + "/" + year+"','"+jta.getText()+"','"+jta2.getText()+"','"+jta3.getText()+"','"+jta4.getText()+"','"+jta5.getText()+"');";
                             }
                             statement.execute(sqlString);
-                            statement.close();
                             
                             java.util.Calendar c = java.util.Calendar.getInstance();
                             c.setTime(new Date(year - 1900, month - 1, 1));
                             int dayOfWeek = c.get(java.util.Calendar.DAY_OF_WEEK);
                             YearMonth yearMonthObject = YearMonth.of((year), month);
                             int daysInMonth = yearMonthObject.lengthOfMonth();
-                            displayDayz(daysInMonth, dayOfWeek);
+                            mgr.displayDayz(month, day, year, daysInMonth, dayOfWeek, graphics, connection, statement);
 
                         } catch(SQLException sqle) {
                             sqle.printStackTrace();
@@ -330,7 +335,6 @@ public class CalendarPlannerDriver
                             statement = connection.createStatement();
                             String sqlString = "delete from calendar where thedate = '"+month + "/" + thei + "/" + year+"';";
                             statement.execute(sqlString);
-                            statement.close();
 
                             plan.dispose();
                             
@@ -339,7 +343,7 @@ public class CalendarPlannerDriver
                             int dayOfWeek = c.get(java.util.Calendar.DAY_OF_WEEK);
                             YearMonth yearMonthObject = YearMonth.of((year), month);
                             int daysInMonth = yearMonthObject.lengthOfMonth();
-                            displayDayz(daysInMonth, dayOfWeek);
+                            mgr.displayDayz(month, day, year, daysInMonth, dayOfWeek, graphics, connection, statement);
                         } catch(SQLException sqle) {
                             sqle.printStackTrace();
                         }
@@ -456,7 +460,7 @@ JButton tgglPlay = new JButton("Toggle Music");
                         int daysInMonth = yearMonthObject.lengthOfMonth();
                         graphics.setColor(Color.BLACK);
                         graphics.drawString(month + "-" + (year), 100, 100);
-                        displayDayz(daysInMonth, dayOfWeek);
+                        mgr.displayDayz(month, day, year, daysInMonth, dayOfWeek, graphics, connection, statement);
                     }
                 };
                 t.start();
@@ -517,7 +521,7 @@ JButton tgglPlay = new JButton("Toggle Music");
                         int daysInMonth = yearMonthObject.lengthOfMonth();
                         graphics.setColor(Color.BLACK);
                         graphics.drawString(month + "-" + (year), 100, 100);
-                        displayDayz(daysInMonth, dayOfWeek);
+                        mgr.displayDayz(month, day, year, daysInMonth, dayOfWeek, graphics, connection, statement);
                     }
                 };
                 t.start();
@@ -578,7 +582,7 @@ JButton tgglPlay = new JButton("Toggle Music");
                         int daysInMonth = yearMonthObject.lengthOfMonth();
                         graphics.setColor(Color.BLACK);
                         graphics.drawString(month + "-" + (year), 100, 100);
-                        displayDayz(daysInMonth, dayOfWeek);
+                        mgr.displayDayz(month, day, year, daysInMonth, dayOfWeek, graphics, connection, statement);
                     }
                 };
                 t.start();
@@ -723,7 +727,7 @@ JButton tgglPlay = new JButton("Toggle Music");
                 graphics.setColor(Color.BLACK);
                 graphics.drawString(tmonth + "-" + (tyer), 100, 100);
                 month = tmonth; year = tyer; day = tdate;
-                displayDayz(daysInMonth, dayOfWeek);
+                mgr.displayDayz(month, day, year, daysInMonth, dayOfWeek, graphics, connection, statement);
                 return;
             }
             sql = "select td from calendar where thedate = '"+cycleCurrentTheDate+"';";
@@ -806,7 +810,7 @@ JButton tgglPlay = new JButton("Toggle Music");
                         graphics.setColor(Color.BLACK);
                         graphics.drawString(tmonth + "-" + (tyer), 100, 100);
                         month = tmonth; year = tyer; day = tdate;
-                        displayDayz(daysInMonth, dayOfWeek);
+                        mgr.displayDayz(month, day, year, daysInMonth, dayOfWeek, graphics, connection, statement);
                         found = false;
                     } else {
                                     //cycleCurrentTheDate = mybad;
@@ -856,74 +860,15 @@ break;
                     graphics.setColor(Color.BLACK);
                     graphics.drawString(tmonth + "-" + (tyer), 100, 100);
                     month = tmonth; year = tyer; day = tdate;
-                    displayDayz(daysInMonth, dayOfWeek);
+                    mgr.displayDayz(month, day, year, daysInMonth, dayOfWeek, graphics, connection, statement);
                 }                
             }
             System.out.println(cycleCurrentTheDate+"<>");
-            statement.close();
         } catch(SQLException sqle) {
             sqle.printStackTrace();
         }
     }
-    
-    public void displayDayz(final int daysInMonth, final int dayOfWeek) {
-        Thread tr = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                graphics.setColor(Color.GREEN);
-                graphics.setFont(new Font("Serif", Font.TRUETYPE_FONT, 30));
 
-                graphics.drawString("SUN  MON  TUES  WED  THUR  FRI  SAT", 100, 145);
-
-                int x = 0;
-                
-                int y = 0;
-
-                ResultSet rs = null;
-                for (int i = 0; i < daysInMonth; i++) {
-                    x=(((dayOfWeek-1)+i)%7)*(80)+20;
-                    final int thei = i+1;
-                    try {
-                        
-                        statement = connection.createStatement();
-                        String sqlString = "select * from calendar where thedate = '"+month + "/" + thei + "/" + year+"';";
-                        rs = statement.executeQuery(sqlString);
-                        if(rs.next()) {
-                            graphics.setColor(Color.GREEN);
-                            graphics.drawString("---",100+x+10-12,y+200+40-20);
-                        }
-                        statement.close();
-                    } catch(SQLException sqle) {
-                        sqle.printStackTrace();
-                    }
-
-                    if(((dayOfWeek-1)+i)%7 == 0) {
-                        x = 0;
-                        y += 70;
-                    }
-                    if (i==day-1 && month == new Date().getMonth()+1 && year == new Date().getYear()+1900) {
-                        graphics.setColor(Color.orange);
-                        graphics.drawOval(100+x-25+20,y+200-42,50,50);
-                    }
-
-                    graphics.setFont(new Font("Serif", Font.TRUETYPE_FONT, 40));
-                    graphics.setColor(Color.lightGray);
-                    graphics.drawRect(100+x-20,y+200-20-80+50,70,70);
-                    if(x == 0) {
-                        graphics.setColor(Color.GREEN);
-                        graphics.drawString(String.valueOf(i+1),100+x,y+200);
-                    }
-                    else {
-                        graphics.setColor(Color.BLACK);
-                        graphics.drawString(String.valueOf(i+1),100+x,y+200);
-                    }
-                }
-            }
-        });
-        tr.start();
-    }
-
-AudioInputStream audioStream = null;        Clip audioClip =null;
     
     private void playKill() {
         try { //P
