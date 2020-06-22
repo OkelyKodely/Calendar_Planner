@@ -13,7 +13,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 
 public class CalendarPlannerDriver 
-        implements MouseListener {
+    implements MouseListener {
 
     private Graphics graphics = null;
     private Statement statement  = null;
@@ -28,7 +28,37 @@ public class CalendarPlannerDriver
     private boolean start, pleaseInsertMe;
 
     public CalendarPlannerDriver() {
+        introSplashScreenOnScreen();
         createConnectionToDataBase(); setAllThings();
+    }
+    
+    public void introSplashScreenOnScreen() {
+        JFrame j = new JFrame();
+        // make the frame half the height and width
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int height = screenSize.height;
+        int width = screenSize.width;
+        j.setBounds(0, 0, 775, 340);
+
+        // here's the part where i center the jframe on screen
+        j.setLocationRelativeTo(null);
+        JPanel p = new JPanel();
+        p.setBounds(j.getBounds());
+        j.add(p);
+        j.setVisible(true);
+        Graphics g = p.getGraphics();
+        try {
+            Image image = ImageIO.read(getClass().getResourceAsStream("splashscreen.jpg"));
+            g.drawImage(image, 0, 0, 775, 340, null);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            Thread.sleep(3000);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        j.dispose();
     }
 
     @Override
@@ -339,13 +369,21 @@ public class CalendarPlannerDriver
 JButton tgglPlay = new JButton("Toggle Music");
     public void setAllThings() {
         panel = new JPanel();
-        panel.setBackground(Color.RED);
+        panel.setBackground(Color .red);
         frame = new JFrame();
         frame.setTitle("Calendar Planner by DC");
         frame.setLayout(null);
         frame.setBounds(0, 0, 1250, 760);
+        // make the frame half the height and width
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int height = screenSize.height;
+        int width = screenSize.width;
+        frame.setBounds(0, 0, 1250, 760);
         panel.setBounds(frame.getBounds());
         frame.add(panel);
+
+        // here's the part where i center the jframe on screen
+        frame.setLocationRelativeTo(null);
         todayMonth = new JButton("Current Month");
         previousMonth = new JButton("< Prev Month");
         nextMonth = new JButton("Next Month >");
@@ -404,7 +442,7 @@ JButton tgglPlay = new JButton("Toggle Music");
                             if(month == 12)
                                 pic = "background12.jpg";
                             Image image = ImageIO.read(getClass().getResourceAsStream(pic));
-                            graphics.drawImage(image, 650, 50, 550, 710, null);
+                            graphics.drawImage(image, 680, 50, 550, 710, null);
                         } catch(Exception ee) {
                             ee.printStackTrace();
                         }
@@ -459,7 +497,7 @@ JButton tgglPlay = new JButton("Toggle Music");
                             if(month == 12)
                                 pic = "background12.jpg";
                             Image image = ImageIO.read(getClass().getResourceAsStream(pic));
-                                                        graphics.drawImage(image, 650, 50, 550, 710, null);
+                                                        graphics.drawImage(image, 680, 50, 550, 710, null);
                         } catch(Exception ee) {
                             ee.printStackTrace();
                         }
@@ -520,7 +558,7 @@ JButton tgglPlay = new JButton("Toggle Music");
                             if(month == 12)
                                 pic = "background12.jpg";
                             Image image = ImageIO.read(getClass().getResourceAsStream(pic));
-                                                        graphics.drawImage(image, 650, 50, 550, 710, null);
+                                                        graphics.drawImage(image, 680, 50, 550, 710, null);
                         } catch(Exception ee) {
                             ee.printStackTrace();
                         }
@@ -581,7 +619,7 @@ JButton tgglPlay = new JButton("Toggle Music");
                             if(month == 12)
                                 pic = "background12.jpg";
                             Image image = ImageIO.read(getClass().getResourceAsStream(pic));
-                                                        graphics.drawImage(image, 650, 50, 550, 710, null);
+                                                        graphics.drawImage(image, 680, 50, 550, 710, null);
                             findTheNextPlanMonth();
                         } catch(Exception ev) {
                             ev.printStackTrace();
@@ -678,7 +716,7 @@ JButton tgglPlay = new JButton("Toggle Music");
                     graphics.setColor(Color.MAGENTA);
                     graphics.fillRect(0, 50, 1250, 760);
                     Image image = ImageIO.read(getClass().getResourceAsStream("background.jpg"));
-                                                graphics.drawImage(image, 650, 50, 550, 710, null);
+                                                graphics.drawImage(image, 680, 50, 550, 710, null);
                 } catch(Exception ee) {
                     ee.printStackTrace();
                 }
@@ -761,7 +799,7 @@ JButton tgglPlay = new JButton("Toggle Music");
                             if(month == 12)
                                 pic = "background12.jpg";
                             Image image = ImageIO.read(getClass().getResourceAsStream(pic));
-                                                        graphics.drawImage(image, 650, 50, 550, 710, null);
+                                                        graphics.drawImage(image, 680, 50, 550, 710, null);
                         } catch(Exception ee) {
                             ee.printStackTrace();
                         }
@@ -811,7 +849,7 @@ break;
                         graphics.setColor(Color.MAGENTA);
                         graphics.fillRect(0, 50, 1250, 760);
                         Image image = ImageIO.read(getClass().getResourceAsStream("background.jpg"));
-                                                    graphics.drawImage(image, 650, 50, 550, 710, null);
+                                                    graphics.drawImage(image, 680, 50, 550, 710, null);
                     } catch(Exception ee) {
                         ee.printStackTrace();
                     }
